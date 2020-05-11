@@ -1,0 +1,93 @@
+canvas{
+	background-color: #111111;
+	height: 100%;
+}
+
+body{
+	background-color: #111111;
+}
+
+.Erase{
+	opacity: 0;
+}
+
+h6{
+	color: #eeeeee;
+	font-size: 20px;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	margin: 0;
+	position: absolute;
+	z-index: 9999;
+	user-select: none;
+}
+
+h6#score{
+	top: 20px;
+	left: 20px;
+}
+
+h6#highscore{
+	top: 20px;
+	right: 20px;
+}
+
+h6#pause{
+	top: 50px;
+	right: 20px;
+	color: #d4872f;
+	font-size: 15px;
+	font-style: italic;
+	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+h6#onStart{
+	font-size: 15px;
+	bottom: 20px;
+	left: 0; 
+	right: 0; 
+	margin-left: auto; 
+	margin-right: auto; 
+	width: 115px;
+}
+
+h6#over{
+	font-size: 50px;
+	color: #BFE8E1;
+	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+	top:170px;
+	left:0px;
+	right:0px;
+	margin-left: auto; 
+	margin-right: auto; 
+	width:220px;
+}
+
+h6#finScore{
+	color: #DE7070;
+	top:300px;
+	left:0px;
+	right:0px;
+	margin-left: auto; 
+	margin-right: auto; 
+	width:145px;
+}
+
+h6#high{
+	color: #178A94;
+	top:340px;
+	left:0px;
+	right:0px;
+	margin-left: auto; 
+	margin-right: auto; 
+	width:145px;
+}
+
+h6#click{
+	font-size: 15px;
+	bottom: 20px;
+	left: 0; 
+	right: 0; 
+	margin-left: auto; 
+	margin-right: auto; 
+	width: 228px;
+}
