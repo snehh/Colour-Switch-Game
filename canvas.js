@@ -17,12 +17,6 @@ window.addEventListener("resize", function(){
     canvas.height = window.innerHeight; 
 });
 
-//     for( var i=0; i<obstacleArray.length; i++ )
-//         obstacleArray[i].x = window.innerWidth/2;
-//     c.clearRect(0,0,innerWidth,innerHeight);
-
-// });
-
 if(localStorage.getItem("highscore") == null)
     localStorage.setItem("highscore",0);
 
@@ -48,7 +42,9 @@ function Obstacle3(x,y,r1,r2,u,col){
     this.col = col;
     var r = (Math.random() - 0.5);
     this.speed = Math.random()*0.01 + 0.008;
-    if(score >= 9)
+    if(score >= 19)
+        this.speed += 0.024;
+    else if(score >= 9)
         this.speed += 0.016;
     else if(score >= 4)
         this.speed += 0.008;
@@ -123,12 +119,14 @@ function Obstacle3(x,y,r1,r2,u,col){
             this.swapDraw();
         }
         else if(flag2 == 0){
+            clickSound.play();
             flag2 = 1;
             p.col++;
         }
         
         if(p.y - p.radius <= this.y + this.r){
             if(flag1 == 0){
+                clickSound.play();
                 score++;
                 flag1 = 1;
             }
@@ -149,6 +147,7 @@ function Obstacle3(x,y,r1,r2,u,col){
     this.collideReact = function(){
     if(!((this.u>3.4-Math.PI*2/3 && this.u<2.9 && p.y>this.y)||(this.u>3.3+Math.PI/3 && this.u<3.3+Math.PI && p.y<this.y)))
     {
+        overSound.play();
         gameOver();
     }
 
@@ -168,7 +167,9 @@ function Obstacle4(x,y,r1,r2,u,col){
     this.col = col;
     var r = (Math.random() - 0.5);
     this.speed = Math.random()*0.01 + 0.008;
-    if(score >= 9)
+    if(score >= 19)
+        this.speed += 0.024;
+    else if(score >= 9)
         this.speed += 0.016;
     else if(score >= 4)
         this.speed += 0.008;
@@ -251,12 +252,14 @@ function Obstacle4(x,y,r1,r2,u,col){
             this.swapDraw();
         }
         else if(flag2 == 0){
+            clickSound.play();
             flag2 = 1;
             p.col++;
         }
         
         if(p.y - p.radius <= this.y + this.r){ 
             if(flag1 == 0){
+                clickSound.play();
                 score++;
                 flag1 = 1;
             }
@@ -274,6 +277,7 @@ function Obstacle4(x,y,r1,r2,u,col){
     this.collideReact = function(){
         if(!((this.u>0.16 && this.u<1.28 && p.y>this.y) || (this.u>0.16+Math.PI && this.u<1.28+Math.PI && p.y<this.y)))
         {
+            overSound.play();
             gameOver();
         }
     }
@@ -310,6 +314,8 @@ function Player(y, dy, radius, col){
         if(this.y + 20 >= window.innerHeight){
             this.dy = 0;
             this.y = window.innerHeight - 20;
+            overSound.play();
+            gameOver();
         }
         else{
         this.dy += this.gravity;
@@ -318,13 +324,19 @@ function Player(y, dy, radius, col){
     }
 }
 
-var colorArray = ["#DE7070","#BFE8E1","#178A94","#2B374B","#DE7070","#BFE8E1","#178A94"];
-//                   red    off white    blue   dark blue       
+var colorArray = ["#401866","#98D25E","#3F818D","#F3B800","#401866","#98D25E","#3F818D"];
+//                  violet     green     blue     orange
 
 var u=0;
 var colVariable = 0;
 var score = 0;
 var p = new Player(450,2,20,0);
+
+var clickSound = new Audio('click.mp3');
+var overSound = new Audio('gameover.mp3');
+
+clickSound.preload = "auto";
+overSound.preload = "auto";
 
 var obstacleArray = [];
 obstacleArray.push(new Obstacle3(window.innerWidth/2, 100, 100, 85, 0, colVariable++));
@@ -332,6 +344,8 @@ obstacleArray.push(new Obstacle3(window.innerWidth/2, 100, 100, 85, 0, colVariab
 function animate(){
 
     c.clearRect(0,0,window.innerWidth,window.innerHeight);
+
+    p.update();
 
     if(score > localStorage.getItem("highscore")){
         localStorage.setItem("highscore", score);
@@ -359,7 +373,7 @@ function animate(){
         obstacleArray[i].update();
     }
 
-    p.update();
+    
 
     if (p.y < 400){
         for( i=0; i<obstacleArray.length; i++)
@@ -381,6 +395,7 @@ function animate(){
 }
 
 function startGame(){
+    bounce();
     document.getElementById("onStart").innerHTML = " ";
     window.removeEventListener("click", startGame);
     animate();
@@ -390,6 +405,7 @@ function gameOver(){
     window.removeEventListener("mousedown", bounce);
     togglePause = -1;
     c.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    canvas.height = 0;
     for(var t=0; t<3; t++)
         document.getElementsByClassName("b")[t].classList.add("Erase");
     for(var t=0; t<4; t++)
@@ -409,8 +425,18 @@ var togglePause = 1;
 p.draw();
 obstacleArray[0].draw();
 obstacleArray[0].point();
+
+c.beginPath();
+c.moveTo(window.innerWidth/2, 480);
+c.lineTo(window.innerWidth/2 + 20, 510);
+c.lineTo(window.innerWidth/2 - 20, 510);
+c.closePath();
+c.fillStyle = "#eeeeee";
+c.fill();
+
 if(localStorage.getItem("highscore") != 0)
     document.getElementById("highscore").innerHTML = "Best: " + localStorage.getItem("highscore");
+
 window.addEventListener("click", startGame);
 
 
@@ -423,6 +449,7 @@ window.addEventListener("keydown", function(event){
         else if(togglePause == 0){
             this.document.getElementById("pause").innerHTML = " ";
             togglePause = 1;
+            p.update();
             animate();
         }
     }
